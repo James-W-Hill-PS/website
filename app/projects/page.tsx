@@ -257,6 +257,7 @@ export default function Projects() {
             >
               We're always looking for new projects to work on together.
             </Text>
+            <br />
             <Button variant="cta" sx={{ px: [3, 4], py: [2, 3] }}>
               Submit Project Idea
             </Button>

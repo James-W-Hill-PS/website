@@ -166,40 +166,6 @@ export default function Resources() {
             </Text>
           </Container>
         </Box>
-
-        <Container sx={{ py: [5, 6, 7] }}>
-          <Card variant="sunken" sx={{ p: [4, 5, 6] }}>
-            <Heading as="h3" sx={{ fontSize: [3, 4], mb: [4, 5], letterSpacing: '-0.01em' }}>
-              📖 Club Resources
-            </Heading>
-            <Grid columns={[1, 2]} gap={[4, 5]}>
-              <Box>
-                <Text sx={{ fontWeight: 'bold', mb: 2, fontSize: [2, 3] }}>Meeting Notes</Text>
-                <Text sx={{ fontSize: [1, 2], color: 'muted', lineHeight: 'body' }}>
-                  Access notes and recordings from past meetings
-                </Text>
-              </Box>
-              <Box>
-                <Text sx={{ fontWeight: 'bold', mb: 2, fontSize: [2, 3] }}>Workshop Materials</Text>
-                <Text sx={{ fontSize: [1, 2], color: 'muted', lineHeight: 'body' }}>
-                  Slides and code from our workshops
-                </Text>
-              </Box>
-              <Box>
-                <Text sx={{ fontWeight: 'bold', mb: 2, fontSize: [2, 3] }}>Project Templates</Text>
-                <Text sx={{ fontSize: [1, 2], color: 'muted', lineHeight: 'body' }}>
-                  Starter code for common project types
-                </Text>
-              </Box>
-              <Box>
-                <Text sx={{ fontWeight: 'bold', mb: 2, fontSize: [2, 3] }}>Discord Server</Text>
-                <Text sx={{ fontSize: [1, 2], color: 'muted', lineHeight: 'body' }}>
-                  Join our community chat and get help
-                </Text>
-              </Box>
-            </Grid>
-          </Card>
-        </Container>
       </Box>
     </ThemeUIProvider>
   )

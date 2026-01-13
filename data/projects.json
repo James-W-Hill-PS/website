@@ -18,4 +18,15 @@
     "tech": ["HTML","CSS"],
     "link": "https://ishaanisverycool.github.io/mynamewebsite/",
     "github": "ishaanisverycool/mynamewebsite"
-  }]
+  },
+  {
+    "title": "Aarav L's Boba Drops Website",
+    "status": "Active",
+    "color": "green",
+    "icon": "https://cdn.loveandlemons.com/wp-content/uploads/2025/05/chocolate-ice-cream.jpg",
+    "description": "VERY VERY COOL WEBSITE MADE BY ISHAAN AARAV!! MADE FOR BOBA DROPS.",
+    "tech": ["HTML","CSS"],
+    "link": "https://dwaithelpsaarav.github.io/new-repository/",
+    "github": "DwaitHelpsAarav/new-repository"
+  }
+]

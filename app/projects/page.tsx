@@ -8,13 +8,48 @@ import {
   Card,
   Grid,
   Badge,
-  Button,
   Flex,
   Link as ThemeLink
 } from 'theme-ui'
 import Icon from '@hackclub/icons'
 import Navigation from '../components/Navigation'
 import projectsData from '../../data/projects.json'
+
+/* =======================
+   TYPES
+======================= */
+
+type BaseProject = {
+  title: string
+  status: string
+  description?: string
+  tech?: string[]
+  link?: string
+  github?: string
+  icon?: string
+}
+
+type ProjectGroup = {
+  group: string
+  icon: string
+  projects: BaseProject[]
+}
+
+type ProjectItem = BaseProject | ProjectGroup
+
+const items = projectsData as ProjectItem[]
+
+/* =======================
+   TYPE GUARD
+======================= */
+
+function isGroup(item: ProjectItem): item is ProjectGroup {
+  return 'group' in item && 'projects' in item
+}
+
+/* =======================
+   PAGE
+======================= */
 
 export default function Projects() {
   const getStatusColor = (status: string) => {
@@ -25,246 +60,190 @@ export default function Projects() {
         return 'blue'
       case 'Completed':
         return 'purple'
-      case 'Planning':
-        return 'orange'
       default:
         return 'muted'
     }
   }
 
+  const renderProjectCard = (
+    project: BaseProject,
+    fallbackIcon?: string
+  ) => (
+    <Card
+      key={project.title}
+      variant="primary"
+      sx={{ p: 4, display: 'flex', flexDirection: 'column' }}
+    >
+      {/* HEADER */}
+      <Flex sx={{ alignItems: 'center', gap: 3, mb: 3 }}>
+        {(project.icon || fallbackIcon) && (
+          <Box sx={{ width: 40, height: 40 }}>
+            <img
+              src={project.icon || fallbackIcon}
+              alt={project.title}
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+            />
+          </Box>
+        )}
+
+        <Heading as="h3" sx={{ fontSize: 3 }}>
+          {project.title}
+        </Heading>
+
+        <Badge
+          sx={{
+            ml: 'auto',
+            bg: getStatusColor(project.status)
+          }}
+        >
+          {project.status}
+        </Badge>
+      </Flex>
+
+      {/* DESCRIPTION */}
+      {project.description && (
+        <Text sx={{ mb: 3, color: 'secondary' }}>
+          {project.description}
+        </Text>
+      )}
+
+      {/* TECH */}
+      {project.tech && (
+        <Flex sx={{ gap: 2, flexWrap: 'wrap', mb: 3 }}>
+          {project.tech.map(t => (
+            <Badge key={t} variant="outline">
+              {t}
+            </Badge>
+          ))}
+        </Flex>
+      )}
+
+      {/* LINKS */}
+      <Flex
+        sx={{
+          gap: 2,
+          mt: 'auto',
+          flexWrap: 'wrap'
+        }}
+      >
+        {project.link && (
+          <ThemeLink
+            href={project.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 3,
+              py: 2,
+              border: '2px solid',
+              borderColor: 'primary',
+              borderRadius: 'default',
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              '&:hover': {
+                bg: 'primary',
+                color: 'background'
+              }
+            }}
+          >
+            View <Icon glyph="external" size={16} />
+          </ThemeLink>
+        )}
+
+        {project.github && (
+          <ThemeLink
+            href={`https://github.com/${project.github}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 1,
+              px: 3,
+              py: 2,
+              border: '2px solid',
+              borderColor: 'primary',
+              borderRadius: 'default',
+              fontWeight: 'bold',
+              textDecoration: 'none',
+              '&:hover': {
+                bg: 'primary',
+                color: 'background'
+              }
+            }}
+          >
+            GitHub <Icon glyph="github" size={16} />
+          </ThemeLink>
+        )}
+      </Flex>
+    </Card>
+  )
+
   return (
-    <Box sx={{ bg: 'background', minHeight: '100vh' }}>
+    <Box>
       <Navigation />
 
-        <Box sx={{ bg: 'sheet', py: [5, 6] }}>
-          <Container sx={{ textAlign: 'center', maxWidth: 'copy' }}>
-            <Heading
-              variant="title"
-              sx={{
-                color: 'red',
-                fontSize: [5, 6, 7],
-                letterSpacing: '-0.02em'
-              }}
-            >
-              Club Projects
-            </Heading>
-            <Text
-              variant="subtitle"
-              sx={{
-                mt: 3,
-                fontSize: [2, 3],
-                lineHeight: 'subheading'
-              }}
-            >
-              Check out what we're building together
-            </Text>
-          </Container>
-        </Box>
+      <Container sx={{ py: 5 }}>
+        <Heading
+          as="h1"
+          sx={{
+            mb: 4,
+            fontSize: [5],
+            fontWeight: 'bold',
+            letterSpacing: '-0.02em'
+          }}
+        >
+          Projects
+        </Heading>
 
-        <Container sx={{ py: [5, 6, 7] }}>
-          <Grid columns={[1, 2]} gap={[3, 4, 5]}>
-            {projectsData.map((project, idx) => (
-              <Card
-                key={idx}
-                variant="primary"
-                sx={{
-                  p: [4, 4, 5],
-                  display: 'flex',
-                  flexDirection: 'column',
-                  height: '100%'
-                }}
-              >
-                <Flex
+        {items.map(item =>
+          isGroup(item) ? (
+            /* =======================
+               GROUP
+            ======================= */
+            <Box key={item.group} sx={{ mb: 6 }}>
+              <Flex sx={{ alignItems: 'center', gap: 3, mb: 4 }}>
+                <Box sx={{ width: 48, height: 48 }}>
+                  <img
+                    src={item.icon}
+                    alt={item.group}
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain'
+                    }}
+                  />
+                </Box>
+                <Heading
+                  as="h2"
                   sx={{
-                    justifyContent: 'space-between',
-                    alignItems: 'start',
-                    mb: 3,
-                    gap: 2
+                    fontSize: [4],
+                    fontWeight: 'bold'
                   }}
                 >
-                  <Flex sx={{ alignItems: 'center', gap: 3 }}>
-                    <Box
-                      sx={{
-                        width: [40, 48],
-                        height: [40, 48],
-                        flexShrink: 0,
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                      }}
-                    >
-                      <img
-                        src={project.icon}
-                        alt={project.title}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'contain'
-                        }}
-                      />
-                    </Box>
-                    <Heading
-                      as="h3"
-                      sx={{ fontSize: [3, 4], lineHeight: 'heading' }}
-                    >
-                      {project.title}
-                    </Heading>
-                  </Flex>
-                  <Badge
-                    variant="pill"
-                    sx={{
-                      bg: getStatusColor(project.status),
-                      flexShrink: 0,
-                      fontSize: [0, 1]
-                    }}
-                  >
-                    {project.status}
-                  </Badge>
-                </Flex>
+                  {item.group}
+                </Heading>
 
-                {project.description && (
-                  <Text
-                    sx={{
-                      mb: 4,
-                      fontSize: [1, 2],
-                      lineHeight: 'body',
-                      color: 'secondary',
-                      flex: 1
-                    }}
-                  >
-                    {project.description}
-                  </Text>
+              </Flex>
+
+              <Grid columns={[1, 2]} gap={4}>
+                {item.projects.map(project =>
+                  renderProjectCard(project, item.icon)
                 )}
-
-                {project.tech && (
-                  <Box sx={{ mb: 4 }}>
-                    <Text
-                      sx={{
-                        fontSize: 1,
-                        fontWeight: 'bold',
-                        mb: 2,
-                        color: 'muted'
-                      }}
-                    >
-                      Tech Stack:
-                    </Text>
-                    <Flex sx={{ gap: 2, flexWrap: 'wrap' }}>
-                      {project.tech.map((tech, i) => (
-                        <Badge
-                          key={i}
-                          variant="outline"
-                          sx={{ fontSize: [0, 1] }}
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    </Flex>
-                  </Box>
-                )}
-
-                {(project.link || project.github) && (
-                  <Flex sx={{ gap: 2, mt: 'auto', flexWrap: 'wrap' }}>
-                    {project.link && (
-                      <ThemeLink
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          fontSize: [1, 2],
-                          flex: 1,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 1,
-                          px: 3,
-                          py: 2,
-                          bg: 'transparent',
-                          color: 'primary',
-                          border: '2px solid',
-                          borderColor: 'primary',
-                          borderRadius: 'default',
-                          fontWeight: 'bold',
-                          textDecoration: 'none',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          whiteSpace: 'nowrap',
-                          '&:hover': {
-                            bg: 'primary',
-                            color: 'background'
-                          }
-                        }}
-                      >
-                        View Project <Icon glyph="enter" size={24} />
-                      </ThemeLink>
-                    )}
-                    {project.github && (
-                      <ThemeLink
-                        href={`https://github.com/${project.github}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        sx={{
-                          fontSize: [1, 2],
-                          flex: 1,
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: 1,
-                          px: 3,
-                          py: 2,
-                          bg: 'transparent',
-                          color: 'primary',
-                          border: '2px solid',
-                          borderColor: 'primary',
-                          borderRadius: 'default',
-                          fontWeight: 'bold',
-                          textDecoration: 'none',
-                          cursor: 'pointer',
-                          transition: 'all 0.2s',
-                          whiteSpace: 'nowrap',
-                          '&:hover': {
-                            bg: 'primary',
-                            color: 'background'
-                          }
-                        }}
-                      >
-                        GitHub <Icon glyph="enter" size={24} />
-                      </ThemeLink>
-                    )}
-                  </Flex>
-                )}
-              </Card>
-            ))}
-          </Grid>
-        </Container>
-
-        <Box sx={{ bg: 'sunken', py: [5, 6, 7] }}>
-          <Container sx={{ textAlign: 'center', maxWidth: 'copy' }}>
-            <Heading
-              variant="headline"
-              sx={{
-                fontSize: [4, 5],
-                letterSpacing: '-0.01em'
-              }}
-            >
-              Have a project idea?
-            </Heading>
-            <Text
-              sx={{
-                mt: 3,
-                mb: 4,
-                fontSize: [2, 3],
-                lineHeight: 'body',
-                color: 'secondary'
-              }}
-            >
-              We're always looking for new projects to work on together.
-            </Text>
-            <br />
-            <Button variant="cta" sx={{ px: [3, 4], py: [2, 3] }}>
-              Submit Project Idea
-            </Button>
-          </Container>
-        </Box>
-      </Box>
+              </Grid>
+            </Box>
+          ) : (
+            /* =======================
+               SINGLE PROJECT
+            ======================= */
+            <Grid key={item.title} columns={[1, 2]} gap={4} sx={{ mb: 6 }}>
+              {renderProjectCard(item)}
+            </Grid>
+          )
+        )}
+      </Container>
+    </Box>
   )
 }

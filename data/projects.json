@@ -28,6 +28,15 @@
         "link": "https://dwaithelpsaarav.github.io/new-repository/",
         "github": "DwaitHelpsAarav/new-repository",
         "icon": "https://cdn.loveandlemons.com/wp-content/uploads/2025/05/chocolate-ice-cream.jpg"
+      },
+      {
+        "title": "Jerry F's Boba Drops Website",
+        "status": "Active",
+        "description": "Jerry needs boba",
+        "tech": ["HTML", "CSS"],
+        "link": "https://jerryfm2000.github.io/Jerry-the-Sigma-Boy/",
+        "github": "Jerryfm2000/Jerry-the-Sigma-Boy",
+        "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfJgWxJMuOQMhYbe4nZqznGc2rLRvhKvgJgA&s"
       }
     ]
   }
